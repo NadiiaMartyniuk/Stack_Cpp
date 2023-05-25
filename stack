@@ -1,0 +1,119 @@
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <sstream>
+#include <cstdio>
+using namespace std;
+
+struct element{
+    int number;
+    element* next;
+};
+struct element2{
+    string number;
+    element* next;
+};
+
+void push(element*&stack, int value){ //dodanie elementu
+    element *el;
+    el=new element;
+    el->number=value;
+    el->next=stack;
+    stack=el;
+}
+
+void pop(element*&stack){ //usuniecie elementu
+    element *temp;
+    temp=stack;
+    stack=stack->next;
+    delete temp;
+}
+
+int isEmpty(element* stack){ //sprawdzanie czy stos jest pusty
+if (stack==nullptr)
+    return 1;
+return 0;
+}
+
+int top(element* stack){ //pobranie elementu ze stosu
+return stack->number;
+}
+
+/*void wczytajPlik(element2* stack){
+    std::fstream* plik;
+    char x;
+    plik.open("znaki1.txt");
+    while(1){
+        x=fgetc( plik );
+        push(stack,x);
+    }
+    plik.close();
+}*/
+
+int main()
+{
+    int menu;
+    element* stack=nullptr;
+//    element2* stack=nullptr;
+    int liczbaDodana;
+    while (menu!=7){
+    cout<<"\t MENU:"<<endl;
+    cout<<"1 - sprawdzenie czy stos jest pusty "<<endl;
+    cout<<"2 - dodanie elementu na stos "<<endl;
+    cout<<"3 - usuniecie elementu ze stosu "<<endl;
+    cout<<"4 - pobranie elementu ze stosu "<<endl;
+    cout<<"5 - usuniecie wszystkich elementow ze stosu"<<endl;
+    cout<<"6 - odwrocenie kolejnosci "<<endl;
+    cout<<"7 - wyjście z programu "<<endl;
+    cin>>menu;
+        switch (menu){
+        case 1:
+            if (isEmpty(stack)){
+                cout<<"Stos jast pusty"<<endl;
+            }
+            else
+                cout<<"Stos NIE jest pusty"<<endl;
+            break;
+        case 2:
+            cout<<"Podaj liczbe z zakresu 1 - 10, jaka chcesz dodacz ";
+            cin>>liczbaDodana;
+            push(stack, liczbaDodana);
+            cout<<"Liczba zostala dodana"<<endl;
+            break;
+        case 3:
+            if (isEmpty(stack)){
+                cout<<"Stos jast pusty"<<endl;
+            }
+            else{
+                pop(stack);
+                cout<<"Wierszcholek stosu zostal usuniety"<<endl;}
+            break;
+        case 4:
+            if (isEmpty(stack)){
+                cout<<"Stos jast pusty"<<endl;
+            }
+            else{
+                cout<<"Element "<<top(stack)<<endl;;}
+            break;
+        case 5:
+            if (isEmpty(stack)){
+                cout<<"Stos jast pusty"<<endl;
+            }
+            else{
+                while (isEmpty(stack)==0){
+                        pop(stack);
+                    }
+                cout<<"Wszystkie elementy stosu zostali usuniety"<<endl;}
+            break;
+        case 6:
+            break;
+        case 7:
+            cout<<"Milego dnia "<<endl;
+            break;
+        default:
+            cout<<"Nie ma takiej opcji "<<endl;
+        }
+    }
+
+    return 0;
+}
