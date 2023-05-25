@@ -1,0 +1,142 @@
+#include<iostream>
+#include<string>
+#include<cstdlib>
+#include<ctime>
+#include<fstream>
+#include<sstream>
+
+using namespace std;
+
+struct element {
+    char character;
+    element* next;
+};
+
+struct queue {
+    element* head;
+    element* tail;
+};
+
+void push(queue& q, char value);
+void pop(queue& q);
+int isEmpty(queue q);
+char first(queue q);
+void wczytajPlik(queue& q) ;
+
+int main()
+{
+    int zadanie = 0;
+    char value, temp;
+    queue q;
+    q.head = nullptr;
+    q.tail = nullptr;
+    srand( time( NULL ) );
+    while (zadanie != 7) {
+        cout << "1. sprawdzenie czy kolejka jest pusta" << endl;
+        cout << "2. dodanie elementu do kolejki" << endl;
+        cout << "3. usuniecie elementu z kolejki" << endl;
+        cout << "4. pobranie elementu z kolejki" << endl;
+        cout << "5. usuniecie wszystkich elementow z kolejki" << endl;
+        cout << "6. wczytanie do kolejki duzych liter alfabetu lacinskiego z pliku tekstowego" << endl;
+        cout << "7. wyjscie z programu" << endl;
+        cout << "Jakie zadanie chcesz wykonac? ";
+        cin >> zadanie;
+        switch (zadanie) {
+            case 1:
+                if (isEmpty(q)==1)
+                    cout<<"Kolejka jest pusta"<<endl;
+                else
+                    cout<<"Kolejka  NIE jest pusta"<<endl;
+                break;
+            case 2:
+                value =(( rand() %( 'z' - '1' ) ) + '1' );
+                /*cout<<"Podaj znak, ktory chcesz dodac do kolejki ";
+                cin>>value;*/
+                push(q, value);
+                cout<<"Element "<<value<<" zostal dodany"<<endl;
+                break;
+            case 3:
+                if (isEmpty(q)==1)
+                    cout<<"Kolejka jest pusta"<<endl;
+                else{
+                    temp = first(q);
+                    pop(q);
+                    cout<<"Element "<<temp<<" zostal usuniety"<<endl;}
+                break;
+            case 4:
+                if (isEmpty(q)==1)
+                    cout<<"Kolejka jest pusta"<<endl;
+                else{
+                    cout<<"Pierszy element "<<first(q)<<endl;}
+                break;
+            case 5:
+                if (isEmpty(q)==1)
+                    cout<<"Kolejka jest pusta"<<endl;
+                else{
+                    while (isEmpty(q)==0){
+                        temp = first(q);
+                        pop(q);
+                        cout<<"Element "<<temp<<" zostal usuniety"<<endl;}}
+                break;
+            case 6:
+                wczytajPlik(q);
+                cout << "Znaki zostaly wczytane do kolejki." << endl;
+                break;
+            case 7:
+                cout<<"pa !";
+                break;
+
+            default:
+                cout << "Nie ma takiej opcji" << endl;
+        }
+        cout<<endl;
+    }
+    return 0;
+}
+
+void push(queue& q, char value) {
+    element* el = new element;
+    el->character = value;
+    el->next = nullptr;
+    if (q.tail != nullptr)
+        q.tail->next = el;
+    else
+        q.head = el;
+    q.tail = el;
+}
+
+void pop(queue& q) {
+    element* temp = q.head;
+    q.head = q.head->next;
+    delete temp;
+    if (q.head == nullptr)
+        q.tail = nullptr;
+}
+
+int isEmpty(queue q) {
+    if (q.head == nullptr)
+        return 1;
+    else
+        return 0;
+}
+
+char first(queue q) {
+    return q.head->character;
+}
+
+void wczytajPlik(queue& q) {
+    ifstream plik;
+    char sim;
+
+    plik.open("znaki2.txt");
+
+    if (plik.is_open()) {
+        while (plik.get(sim)) {
+            if (((int)sim)>=65 && ((int)sim<=90))
+                push(q, sim);
+        }
+        plik.close();
+    } else {
+        cout << "Nie udalo sie otworzyc pliku." << endl;
+    }
+}
